@@ -2,6 +2,9 @@ package authproject.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,12 +35,12 @@ public class User implements UserDetails, Serializable {
   @Column(name = "enabled", nullable = false)
   private Boolean enabled = false;
 
-  @ColumnDefault("CURRENT_TIMESTAMP")
-  @Column(name = "created_at")
+  @CreationTimestamp(source = SourceType.DB)
+  @Column(name = "created_at", nullable = false)
   private Instant createdAt;
 
-  @ColumnDefault("CURRENT_TIMESTAMP")
-  @Column(name = "updated_at")
+  @UpdateTimestamp(source = SourceType.DB)
+  @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
   public User() {
@@ -93,12 +96,12 @@ public class User implements UserDetails, Serializable {
     return createdAt;
   }
 
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
   public Instant getUpdatedAt() {
     return updatedAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
   }
 
   public void setUpdatedAt(Instant updatedAt) {
@@ -116,12 +119,11 @@ public class User implements UserDetails, Serializable {
         Objects.equals(password, user.password) &&
         Objects.equals(email, user.email) &&
         Objects.equals(enabled, user.enabled) &&
-        Objects.equals(createdAt, user.createdAt) &&
-        Objects.equals(updatedAt, user.updatedAt);
+        Objects.equals(createdAt, user.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, password, email, enabled, createdAt, updatedAt);
+    return Objects.hash(id, username, password, email, enabled, createdAt);
   }
 }
