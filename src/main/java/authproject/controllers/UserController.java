@@ -27,4 +27,10 @@ public class UserController {
   public ResponseEntity<User> findSingle(@PathVariable("id") Long id) {
     return ResponseEntity.ok(service.findSingle(id));
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    service.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }
