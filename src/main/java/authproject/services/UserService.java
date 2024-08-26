@@ -19,6 +19,7 @@ public class UserService {
   }
 
   public List<User> findAll() {
+    logger.info("Fetching all users");
     return repository.findAll();
   }
 }
