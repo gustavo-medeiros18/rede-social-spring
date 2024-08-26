@@ -46,6 +46,21 @@ public class PhotoService {
     return photoRepository.findById(id).get();
   }
 
+  public Photo update(Long id, PhotoDto photoDto) {
+    logger.info("Updating photo with id: " + id);
+
+    Photo existentPhoto = photoRepository.findById(id).orElse(null);
+    if (existentPhoto == null) return null;
+
+    existentPhoto.setUrl(photoDto.getUrl());
+    existentPhoto.setDescription(photoDto.getDescription());
+
+    User user = userRepository.findById(photoDto.getUserId()).get();
+    existentPhoto.setUser(user);
+
+    return photoRepository.save(existentPhoto);
+  }
+
   public void delete(Long id) {
     logger.info("Deleting photo with id: " + id);
     photoRepository.deleteById(id);
