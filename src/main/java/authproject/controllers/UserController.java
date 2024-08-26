@@ -18,6 +18,11 @@ public class UserController {
     this.service = service;
   }
 
+  @PostMapping()
+  public ResponseEntity<User> create(@RequestBody User user) {
+    return ResponseEntity.ok(service.create(user));
+  }
+
   @GetMapping()
   public ResponseEntity<List<User>> findAll() {
     return ResponseEntity.ok(service.findAll());
