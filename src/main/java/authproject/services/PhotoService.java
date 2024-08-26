@@ -8,6 +8,7 @@ import authproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -33,5 +34,9 @@ public class PhotoService {
     photo.setUser(user);
 
     return photoRepository.save(photo);
+  }
+
+  public List<Photo> findAll() {
+    return photoRepository.findAll();
   }
 }
