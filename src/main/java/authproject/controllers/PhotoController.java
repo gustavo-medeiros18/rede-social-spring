@@ -33,4 +33,10 @@ public class PhotoController {
   public ResponseEntity<Photo> findSingle(@PathVariable Long id) {
     return ResponseEntity.ok(service.findSingle(id));
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    service.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }
