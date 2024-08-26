@@ -33,6 +33,17 @@ public class UserService {
     return repository.findById(id).orElse(null);
   }
 
+  public User update(Long id, User user) {
+    logger.info("Updating user with id: " + id);
+
+    User existingUser = repository.findById(id).orElse(null);
+    if (existingUser == null) return null;
+
+    existingUser.setUsername(user.getUsername());
+    existingUser.setPassword(user.getPassword());
+    return repository.save(existingUser);
+  }
+
   public void delete(Long id) {
     logger.info("Deleting user with id: " + id);
     repository.deleteById(id);
