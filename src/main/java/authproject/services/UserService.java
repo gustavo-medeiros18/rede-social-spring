@@ -22,4 +22,9 @@ public class UserService {
     logger.info("Fetching all users");
     return repository.findAll();
   }
+
+  public User findSingle(Long id) {
+    logger.info("Fetching user with id: " + id);
+    return repository.findById(id).orElse(null);
+  }
 }
