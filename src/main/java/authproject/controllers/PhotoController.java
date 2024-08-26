@@ -28,4 +28,9 @@ public class PhotoController {
   public ResponseEntity<List<Photo>> findAll() {
     return ResponseEntity.ok(service.findAll());
   }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Photo> findSingle(@PathVariable Long id) {
+    return ResponseEntity.ok(service.findSingle(id));
+  }
 }
