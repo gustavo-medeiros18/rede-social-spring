@@ -37,10 +37,17 @@ public class PhotoService {
   }
 
   public List<Photo> findAll() {
+    logger.info("Fetching all photos");
     return photoRepository.findAll();
   }
 
   public Photo findSingle(Long id) {
+    logger.info("Fetching photo with id: " + id);
     return photoRepository.findById(id).get();
+  }
+
+  public void delete(Long id) {
+    logger.info("Deleting photo with id: " + id);
+    photoRepository.deleteById(id);
   }
 }
