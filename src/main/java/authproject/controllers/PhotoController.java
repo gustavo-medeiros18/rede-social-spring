@@ -34,6 +34,14 @@ public class PhotoController {
     return ResponseEntity.ok(service.findSingle(id));
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<Photo> update(@PathVariable Long id, @RequestBody PhotoDto photoDto) {
+    Photo updatedPhoto = service.update(id, photoDto);
+
+    if (updatedPhoto == null) return ResponseEntity.notFound().build();
+    else return ResponseEntity.ok(service.update(id, photoDto));
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
