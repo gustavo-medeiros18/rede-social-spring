@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,9 @@ public class User implements Serializable {
   @ColumnDefault("1")
   @Column(name = "enabled", nullable = false)
   private Boolean enabled = false;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<Photo> photos;
 
   @CreationTimestamp(source = SourceType.DB)
   @Column(name = "created_at", nullable = false)
