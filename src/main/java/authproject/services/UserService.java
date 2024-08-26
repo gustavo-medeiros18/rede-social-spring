@@ -27,4 +27,9 @@ public class UserService {
     logger.info("Fetching user with id: " + id);
     return repository.findById(id).orElse(null);
   }
+
+  public void delete(Long id) {
+    logger.info("Deleting user with id: " + id);
+    repository.deleteById(id);
+  }
 }
