@@ -5,18 +5,14 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
@@ -61,11 +57,6 @@ public class User implements UserDetails, Serializable {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of();
   }
 
   public String getPassword() {
