@@ -33,6 +33,14 @@ public class UserController {
     return ResponseEntity.ok(service.findSingle(id));
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody User user) {
+    User updatedUser = service.update(id, user);
+
+    if (updatedUser == null) return ResponseEntity.notFound().build();
+    else return ResponseEntity.ok(updatedUser);
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     service.delete(id);
