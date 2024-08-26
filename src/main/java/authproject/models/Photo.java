@@ -20,7 +20,6 @@ public class Photo implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonIdentityReference(alwaysAsId = true)
   private User user;
 
   @Column(name = "url", nullable = false)
