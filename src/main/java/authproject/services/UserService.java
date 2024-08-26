@@ -18,6 +18,11 @@ public class UserService {
     this.repository = repository;
   }
 
+  public User create(User user) {
+    logger.info("Saving user: " + user);
+    return repository.save(user);
+  }
+
   public List<User> findAll() {
     logger.info("Fetching all users");
     return repository.findAll();
