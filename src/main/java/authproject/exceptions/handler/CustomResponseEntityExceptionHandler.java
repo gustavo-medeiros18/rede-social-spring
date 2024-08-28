@@ -1,6 +1,7 @@
 package authproject.exceptions.handler;
 
 import authproject.exceptions.ExceptionResponse;
+import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,19 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     );
 
     return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(InvalidDataInputException.class)
+  public final ResponseEntity<ExceptionResponse> handleInvalidDataInputExceptions(
+      Exception ex,
+      WebRequest request
+  ) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false)
+    );
+
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 }
