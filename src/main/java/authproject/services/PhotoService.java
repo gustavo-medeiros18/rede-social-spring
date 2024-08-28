@@ -69,6 +69,10 @@ public class PhotoService {
 
   public void delete(Long id) {
     logger.info("Deleting photo with id: " + id);
-    photoRepository.deleteById(id);
+
+    Photo existentPhoto = photoRepository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("No records found for this ID!")
+    );
+    photoRepository.delete(existentPhoto);
   }
 }

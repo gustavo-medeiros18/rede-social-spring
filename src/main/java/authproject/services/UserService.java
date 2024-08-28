@@ -50,6 +50,10 @@ public class UserService {
 
   public void delete(Long id) {
     logger.info("Deleting user with id: " + id);
-    repository.deleteById(id);
+
+    User existingUser = repository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("No records found for this ID!")
+    );
+    repository.delete(existingUser);
   }
 }
