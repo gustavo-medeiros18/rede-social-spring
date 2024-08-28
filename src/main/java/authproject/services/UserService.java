@@ -1,5 +1,6 @@
 package authproject.services;
 
+import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.User;
 import authproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,17 @@ public class UserService {
 
   public User findSingle(Long id) {
     logger.info("Fetching user with id: " + id);
-    return repository.findById(id).orElse(null);
+    return repository.findById(id).orElseThrow(() ->
+        new ResourceNotFoundException("No records found for this ID!")
+    );
   }
 
   public User update(Long id, User user) {
     logger.info("Updating user with id: " + id);
 
-    User existingUser = repository.findById(id).orElse(null);
-    if (existingUser == null) return null;
+    User existingUser = repository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("No records found for this ID!")
+    );
 
     existingUser.setUsername(user.getUsername());
     existingUser.setPassword(user.getPassword());
