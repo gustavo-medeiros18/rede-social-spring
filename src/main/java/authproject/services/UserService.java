@@ -1,8 +1,10 @@
 package authproject.services;
 
+import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.User;
 import authproject.repositories.UserRepository;
+import authproject.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,14 @@ public class UserService {
 
   public User create(User user) {
     logger.info("Saving user: " + user);
+
+    if (!UserValidator.usernameIsValid(user.getUsername()))
+      throw new InvalidDataInputException("Username is invalid!");
+    if (!UserValidator.passwordIsValid(user.getPassword()))
+      throw new InvalidDataInputException("Password is invalid!");
+    if (!UserValidator.emailIsValid(user.getEmail()))
+      throw new InvalidDataInputException("Email is invalid!");
+
     return repository.save(user);
   }
 
@@ -42,6 +52,13 @@ public class UserService {
     User existingUser = repository.findById(id).orElseThrow(
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
+
+    if (!UserValidator.usernameIsValid(user.getUsername()))
+      throw new InvalidDataInputException("Username is invalid!");
+    if (!UserValidator.passwordIsValid(user.getPassword()))
+      throw new InvalidDataInputException("Password is invalid!");
+    if (!UserValidator.emailIsValid(user.getEmail()))
+      throw new InvalidDataInputException("Email is invalid!");
 
     existingUser.setUsername(user.getUsername());
     existingUser.setPassword(user.getPassword());
