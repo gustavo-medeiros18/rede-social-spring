@@ -1,6 +1,7 @@
 package authproject.services;
 
 import authproject.dtos.PhotoDto;
+import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.Photo;
 import authproject.models.User;
 import authproject.repositories.PhotoRepository;
@@ -43,19 +44,24 @@ public class PhotoService {
 
   public Photo findSingle(Long id) {
     logger.info("Fetching photo with id: " + id);
-    return photoRepository.findById(id).get();
+    return photoRepository.findById(id).orElseThrow(() ->
+        new ResourceNotFoundException("No records found for this ID!")
+    );
   }
 
   public Photo update(Long id, PhotoDto photoDto) {
     logger.info("Updating photo with id: " + id);
 
-    Photo existentPhoto = photoRepository.findById(id).orElse(null);
-    if (existentPhoto == null) return null;
+    Photo existentPhoto = photoRepository.findById(id).orElseThrow(
+        () -> new ResourceNotFoundException("No records found for this Photo ID!")
+    );
 
     existentPhoto.setUrl(photoDto.getUrl());
     existentPhoto.setDescription(photoDto.getDescription());
 
-    User user = userRepository.findById(photoDto.getUserId()).get();
+    User user = userRepository.findById(photoDto.getUserId()).orElseThrow(
+        () -> new ResourceNotFoundException("No records found for this User ID!")
+    );
     existentPhoto.setUser(user);
 
     return photoRepository.save(existentPhoto);
