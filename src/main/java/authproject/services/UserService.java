@@ -1,5 +1,6 @@
 package authproject.services;
 
+import authproject.controllers.UserController;
 import authproject.exceptions.DuplicatedEntryException;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
@@ -8,6 +9,9 @@ import authproject.repositories.UserRepository;
 import authproject.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,7 +32,10 @@ public class UserService {
     verifyUserFields(user);
 
     try {
-      return repository.save(user);
+      User createdUser = repository.save(user);
+
+      createdUser.add(linkTo(methodOn(UserController.class).findSingle(createdUser.getId())).withSelfRel());
+      return createdUser;
     } catch (Exception e) {
       throw new DuplicatedEntryException("Username or email already exists!");
     }
@@ -36,14 +43,24 @@ public class UserService {
 
   public List<User> findAll() {
     logger.info("Fetching all users");
-    return repository.findAll();
+
+    List<User> users = repository.findAll();
+
+    for (User user : users)
+      user.add(linkTo(methodOn(UserController.class).findSingle(user.getId())).withSelfRel());
+
+    return users;
   }
 
   public User findSingle(Long id) {
     logger.info("Fetching user with id: " + id);
-    return repository.findById(id).orElseThrow(() ->
+
+    User user = repository.findById(id).orElseThrow(() ->
         new ResourceNotFoundException("No records found for this ID!")
     );
+
+    user.add(linkTo(methodOn(UserController.class).findSingle(id)).withSelfRel());
+    return user;
   }
 
   public User update(Long id, User user) {
@@ -60,7 +77,10 @@ public class UserService {
     existingUser.setPassword(user.getPassword());
 
     try {
-      return repository.save(existingUser);
+      User updatedUser = repository.save(existingUser);
+
+      updatedUser.add(linkTo(methodOn(UserController.class).findSingle(updatedUser.getId())).withSelfRel());
+      return updatedUser;
     } catch (Exception e) {
       throw new DuplicatedEntryException("Username or email already exists!");
     }
