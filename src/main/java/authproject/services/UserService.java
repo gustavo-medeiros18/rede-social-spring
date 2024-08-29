@@ -24,12 +24,7 @@ public class UserService {
   public User create(User user) {
     logger.info("Saving user: " + user);
 
-    if (!UserValidator.usernameIsValid(user.getUsername()))
-      throw new InvalidDataInputException("Username is invalid!");
-    if (!UserValidator.passwordIsValid(user.getPassword()))
-      throw new InvalidDataInputException("Password is invalid!");
-    if (!UserValidator.emailIsValid(user.getEmail()))
-      throw new InvalidDataInputException("Email is invalid!");
+    verifyUserFields(user);
 
     return repository.save(user);
   }
@@ -48,6 +43,8 @@ public class UserService {
 
   public User update(Long id, User user) {
     logger.info("Updating user with id: " + id);
+
+    verifyUserFields(user);
 
     User existingUser = repository.findById(id).orElseThrow(
         () -> new ResourceNotFoundException("No records found for this ID!")
@@ -72,5 +69,21 @@ public class UserService {
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
     repository.delete(existingUser);
+  }
+
+  private void verifyUserFields(User user) {
+    if (
+        user == null ||
+            user.getUsername() == null ||
+            user.getPassword() == null ||
+            user.getEmail() == null
+    )
+      throw new InvalidDataInputException("User object has null attributes!");
+    if (!UserValidator.usernameIsValid(user.getUsername()))
+      throw new InvalidDataInputException("Username is invalid!");
+    if (!UserValidator.passwordIsValid(user.getPassword()))
+      throw new InvalidDataInputException("Password is invalid!");
+    if (!UserValidator.emailIsValid(user.getEmail()))
+      throw new InvalidDataInputException("Email is invalid!");
   }
 }
