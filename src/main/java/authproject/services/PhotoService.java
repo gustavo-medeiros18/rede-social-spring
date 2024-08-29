@@ -1,11 +1,13 @@
 package authproject.services;
 
 import authproject.dtos.PhotoDto;
+import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.Photo;
 import authproject.models.User;
 import authproject.repositories.PhotoRepository;
 import authproject.repositories.UserRepository;
+import authproject.validators.PhotoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +76,21 @@ public class PhotoService {
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
     photoRepository.delete(existentPhoto);
+  }
+
+  private void verifyPhotoFields(PhotoDto photoDto) {
+    if (
+        photoDto == null ||
+            photoDto.getUrl() == null ||
+            photoDto.getDescription() == null ||
+            photoDto.getUserId() == null
+    )
+      throw new InvalidDataInputException("Photo object has null attributes!");
+    if (!PhotoValidator.urlIsValid(photoDto.getUrl()))
+      throw new InvalidDataInputException("URL is invalid!");
+    if (!PhotoValidator.descriptionIsValid(photoDto.getDescription()))
+      throw new InvalidDataInputException("Description is invalid!");
+    if (!PhotoValidator.userIdIsValid(photoDto.getUserId()))
+      throw new InvalidDataInputException("User ID is invalid!");
   }
 }
