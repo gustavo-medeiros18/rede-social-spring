@@ -1,5 +1,6 @@
 package authproject.exceptions.handler;
 
+import authproject.exceptions.DuplicatedEntryException;
 import authproject.exceptions.ExceptionResponse;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
@@ -56,5 +57,19 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     );
 
     return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+  }
+
+  @ExceptionHandler(DuplicatedEntryException.class)
+  public final ResponseEntity<ExceptionResponse> handleDuplicatedEntryExceptions(
+      Exception ex,
+      WebRequest request
+  ) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false)
+    );
+
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
   }
 }
