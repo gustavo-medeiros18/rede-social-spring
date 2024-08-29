@@ -1,5 +1,6 @@
 package authproject.services;
 
+import authproject.exceptions.DuplicatedEntryException;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.User;
@@ -26,7 +27,11 @@ public class UserService {
 
     verifyUserFields(user);
 
-    return repository.save(user);
+    try {
+      return repository.save(user);
+    } catch (Exception e) {
+      throw new DuplicatedEntryException("Username or email already exists!");
+    }
   }
 
   public List<User> findAll() {
@@ -59,7 +64,12 @@ public class UserService {
 
     existingUser.setUsername(user.getUsername());
     existingUser.setPassword(user.getPassword());
-    return repository.save(existingUser);
+
+    try {
+      return repository.save(existingUser);
+    } catch (Exception e) {
+      throw new DuplicatedEntryException("Username or email already exists!");
+    }
   }
 
   public void delete(Long id) {
