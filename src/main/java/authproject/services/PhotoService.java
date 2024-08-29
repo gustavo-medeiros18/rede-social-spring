@@ -29,6 +29,8 @@ public class PhotoService {
   public Photo create(PhotoDto photoDto) {
     logger.info("Creating photo for user with id: " + photoDto.getUserId());
 
+    verifyPhotoFields(photoDto);
+
     Photo photo = new Photo();
     photo.setUrl(photoDto.getUrl());
     photo.setDescription(photoDto.getDescription());
@@ -53,6 +55,8 @@ public class PhotoService {
 
   public Photo update(Long id, PhotoDto photoDto) {
     logger.info("Updating photo with id: " + id);
+
+    verifyPhotoFields(photoDto);
 
     Photo existentPhoto = photoRepository.findById(id).orElseThrow(
         () -> new ResourceNotFoundException("No records found for this Photo ID!")
