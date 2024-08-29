@@ -55,14 +55,8 @@ public class UserService {
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
 
-    if (!UserValidator.usernameIsValid(user.getUsername()))
-      throw new InvalidDataInputException("Username is invalid!");
-    if (!UserValidator.passwordIsValid(user.getPassword()))
-      throw new InvalidDataInputException("Password is invalid!");
-    if (!UserValidator.emailIsValid(user.getEmail()))
-      throw new InvalidDataInputException("Email is invalid!");
-
     existingUser.setUsername(user.getUsername());
+    existingUser.setEmail(user.getEmail());
     existingUser.setPassword(user.getPassword());
 
     try {
