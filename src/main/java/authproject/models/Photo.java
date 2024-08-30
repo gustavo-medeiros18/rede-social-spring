@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "photos", schema = "database")
-public class Photo implements Serializable {
+public class Photo extends RepresentationModel<Photo> implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
