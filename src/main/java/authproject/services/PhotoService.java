@@ -1,5 +1,6 @@
 package authproject.services;
 
+import authproject.controllers.PhotoController;
 import authproject.dtos.PhotoDto;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
@@ -10,6 +11,9 @@ import authproject.repositories.UserRepository;
 import authproject.validators.PhotoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -35,22 +39,36 @@ public class PhotoService {
     photo.setUrl(photoDto.getUrl());
     photo.setDescription(photoDto.getDescription());
 
-    User user = userRepository.findById(photoDto.getUserId()).get();
+    User user = userRepository.findById(photoDto.getUserId()).orElseThrow(() ->
+        new ResourceNotFoundException("No records found for this User ID!")
+    );
     photo.setUser(user);
 
-    return photoRepository.save(photo);
+    Photo createdPhoto = photoRepository.save(photo);
+    createdPhoto.add(linkTo(methodOn(PhotoController.class).findSingle(createdPhoto.getId())).withSelfRel());
+
+    return createdPhoto;
   }
 
   public List<Photo> findAll() {
     logger.info("Fetching all photos");
-    return photoRepository.findAll();
+
+    List<Photo> photos = photoRepository.findAll();
+    for (Photo photo : photos)
+      photo.add(linkTo(methodOn(PhotoController.class).findSingle(photo.getId())).withSelfRel());
+
+    return photos;
   }
 
   public Photo findSingle(Long id) {
     logger.info("Fetching photo with id: " + id);
-    return photoRepository.findById(id).orElseThrow(() ->
+
+    Photo photo = photoRepository.findById(id).orElseThrow(() ->
         new ResourceNotFoundException("No records found for this ID!")
     );
+
+    photo.add(linkTo(methodOn(PhotoController.class).findSingle(id)).withSelfRel());
+    return photo;
   }
 
   public Photo update(Long id, PhotoDto photoDto) {
@@ -70,7 +88,12 @@ public class PhotoService {
     );
     existentPhoto.setUser(user);
 
-    return photoRepository.save(existentPhoto);
+    Photo updatedPhoto = photoRepository.save(existentPhoto);
+
+    if (updatedPhoto.getLinks().isEmpty())
+      updatedPhoto.add(linkTo(methodOn(PhotoController.class).findSingle(updatedPhoto.getId())).withSelfRel());
+
+    return updatedPhoto;
   }
 
   public void delete(Long id) {
