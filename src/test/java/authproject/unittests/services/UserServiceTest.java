@@ -233,6 +233,21 @@ public class UserServiceTest {
   }
 
   @Test
+  void testUpdateWithInvalidPassword() {
+    User entity = input.mockEntity(1);
+    entity.setPassword("password");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.update(1L, entity);
+    });
+
+    String expectedMessage = "Password is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testUpdateWithUnknownUser() {
     User entity = input.mockEntity(1);
 
