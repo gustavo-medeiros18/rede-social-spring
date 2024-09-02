@@ -317,4 +317,18 @@ public class UserServiceTest {
 
     service.delete(1L);
   }
+
+  @Test
+  void testDeleteWithUnknownUser() {
+    when(repository.findById(1L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      service.delete(1L);
+    });
+
+    String expectedMessage = "No records found for this ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
