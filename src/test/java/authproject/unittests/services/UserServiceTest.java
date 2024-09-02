@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,9 +37,55 @@ public class UserServiceTest {
   }
 
   @Test
+  void testFindAll() {
+    List<User> list = input.mockEntityList();
+    when(repository.findAll()).thenReturn(list);
+
+    List<User> returnedUsers = service.findAll();
+
+    assertNotNull(returnedUsers);
+    assertEquals(15, returnedUsers.size());
+
+    User userOne = returnedUsers.get(1);
+    assertNotNull(userOne);
+    assertNotNull(userOne.getId());
+    assertNotNull(userOne.getLinks());
+    assertTrue(userOne.toString().contains("links: [</user/1>;rel=\"self\"]"));
+    assertEquals("usernametest1", userOne.getUsername());
+    assertEquals("emailtest1@test.com", userOne.getEmail());
+    assertEquals("passwordtest1", userOne.getPassword());
+    assertEquals(true, userOne.getEnabled());
+    assertEquals("2024-01-01T00:00:00Z", userOne.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", userOne.getUpdatedAt().toString());
+
+    User useFour = returnedUsers.get(4);
+    assertNotNull(useFour);
+    assertNotNull(useFour.getId());
+    assertNotNull(useFour.getLinks());
+    assertTrue(useFour.toString().contains("links: [</user/4>;rel=\"self\"]"));
+    assertEquals("usernametest4", useFour.getUsername());
+    assertEquals("emailtest4@test.com", useFour.getEmail());
+    assertEquals("passwordtest4", useFour.getPassword());
+    assertEquals(true, useFour.getEnabled());
+    assertEquals("2024-01-01T00:00:00Z", useFour.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", useFour.getUpdatedAt().toString());
+
+    User userSeven = returnedUsers.get(7);
+    assertNotNull(userSeven);
+    assertNotNull(userSeven.getId());
+    assertNotNull(userSeven.getLinks());
+    assertTrue(userSeven.toString().contains("links: [</user/7>;rel=\"self\"]"));
+    assertEquals("usernametest7", userSeven.getUsername());
+    assertEquals("emailtest7@test.com", userSeven.getEmail());
+    assertEquals("passwordtest7", userSeven.getPassword());
+    assertEquals(true, userSeven.getEnabled());
+    assertEquals("2024-01-01T00:00:00Z", userSeven.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", userSeven.getUpdatedAt().toString());
+  }
+
+  @Test
   void testFindSingle() {
     User entity = input.mockEntity(1);
-    entity.setId(1L);
 
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
     User returnedUser = service.findSingle(1L);
