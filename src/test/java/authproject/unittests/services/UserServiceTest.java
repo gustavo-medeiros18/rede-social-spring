@@ -51,9 +51,9 @@ public class UserServiceTest {
     assertNotNull(userOne.getId());
     assertNotNull(userOne.getLinks());
     assertTrue(userOne.toString().contains("links: [</user/1>;rel=\"self\"]"));
-    assertEquals("usernametest1", userOne.getUsername());
+    assertEquals("username_1", userOne.getUsername());
     assertEquals("emailtest1@test.com", userOne.getEmail());
-    assertEquals("passwordtest1", userOne.getPassword());
+    assertEquals("Password1!", userOne.getPassword());
     assertEquals(true, userOne.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", userOne.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", userOne.getUpdatedAt().toString());
@@ -63,9 +63,9 @@ public class UserServiceTest {
     assertNotNull(useFour.getId());
     assertNotNull(useFour.getLinks());
     assertTrue(useFour.toString().contains("links: [</user/4>;rel=\"self\"]"));
-    assertEquals("usernametest4", useFour.getUsername());
+    assertEquals("username_4", useFour.getUsername());
     assertEquals("emailtest4@test.com", useFour.getEmail());
-    assertEquals("passwordtest4", useFour.getPassword());
+    assertEquals("Password4!", useFour.getPassword());
     assertEquals(true, useFour.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", useFour.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", useFour.getUpdatedAt().toString());
@@ -75,9 +75,9 @@ public class UserServiceTest {
     assertNotNull(userSeven.getId());
     assertNotNull(userSeven.getLinks());
     assertTrue(userSeven.toString().contains("links: [</user/7>;rel=\"self\"]"));
-    assertEquals("usernametest7", userSeven.getUsername());
+    assertEquals("username_7", userSeven.getUsername());
     assertEquals("emailtest7@test.com", userSeven.getEmail());
-    assertEquals("passwordtest7", userSeven.getPassword());
+    assertEquals("Password7!", userSeven.getPassword());
     assertEquals(true, userSeven.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", userSeven.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", userSeven.getUpdatedAt().toString());
@@ -96,9 +96,9 @@ public class UserServiceTest {
 
     assertTrue(returnedUser.toString().contains("links: [</user/1>;rel=\"self\"]"));
 
-    assertEquals("usernametest1", returnedUser.getUsername());
+    assertEquals("username_1", returnedUser.getUsername());
     assertEquals("emailtest1@test.com", returnedUser.getEmail());
-    assertEquals("passwordtest1", returnedUser.getPassword());
+    assertEquals("Password1!", returnedUser.getPassword());
     assertEquals(true, returnedUser.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", returnedUser.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", returnedUser.getUpdatedAt().toString());
