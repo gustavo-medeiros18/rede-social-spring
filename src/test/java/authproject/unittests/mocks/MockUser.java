@@ -14,6 +14,7 @@ public class MockUser {
   public User mockEntity(Integer number) {
     User user = new User();
 
+    user.setId(number.longValue());
     user.setUsername("usernametest" + number);
     user.setEmail("emailtest" + number + "@test.com");
     user.setPassword("passwordtest" + number);
