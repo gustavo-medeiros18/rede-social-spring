@@ -1,5 +1,6 @@
 package authproject.unittests.services;
 
+import authproject.exceptions.InvalidDataInputException;
 import authproject.models.User;
 import authproject.repositories.UserRepository;
 import authproject.services.UserService;
@@ -55,6 +56,18 @@ public class UserServiceTest {
     assertEquals(true, savedUser.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", savedUser.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", savedUser.getUpdatedAt().toString());
+  }
+
+  @Test
+  void testCreateWithNullInput() {
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.create(null);
+    });
+
+    String expectedMessage = "User object has null attributes!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
