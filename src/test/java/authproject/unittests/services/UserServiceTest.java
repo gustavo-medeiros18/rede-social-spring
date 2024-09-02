@@ -187,6 +187,21 @@ public class UserServiceTest {
   }
 
   @Test
+  void testUpdateWithInvalidUsername() {
+    User entity = input.mockEntity(1);
+    entity.setUsername("mynameiswaytoolongandshouldnotbeaccepted");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.update(1L, entity);
+    });
+
+    String expectedMessage = "Username is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testDelete() {
     User entity = input.mockEntity(1);
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
