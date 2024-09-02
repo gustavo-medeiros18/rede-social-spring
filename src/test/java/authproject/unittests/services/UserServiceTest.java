@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.endsWith;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -122,5 +123,13 @@ public class UserServiceTest {
     assertEquals(true, returnedUser.getEnabled());
     assertEquals("2024-01-01T00:00:00Z", returnedUser.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", returnedUser.getUpdatedAt().toString());
+  }
+
+  @Test
+  void testDelete() {
+    User entity = input.mockEntity(1);
+    when(repository.findById(1L)).thenReturn(Optional.of(entity));
+
+    service.delete(1L);
   }
 }
