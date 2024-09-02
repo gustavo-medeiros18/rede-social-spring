@@ -71,6 +71,21 @@ public class UserServiceTest {
   }
 
   @Test
+  void testCreateWithInvalidUsername() {
+    User entity = input.mockEntity(1);
+    entity.setUsername("mynameiswaytoolongandshouldnotbeaccepted");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.create(entity);
+    });
+
+    String expectedMessage = "Username is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testFindAll() {
     List<User> list = input.mockEntityList();
     when(repository.findAll()).thenReturn(list);
