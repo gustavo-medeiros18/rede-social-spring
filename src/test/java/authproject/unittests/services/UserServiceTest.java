@@ -160,6 +160,18 @@ public class UserServiceTest {
   }
 
   @Test
+  void testUpdateWithNullInput() {
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.update(1L, null);
+    });
+
+    String expectedMessage = "User object has null attributes!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testDelete() {
     User entity = input.mockEntity(1);
     when(repository.findById(1L)).thenReturn(Optional.of(entity));
