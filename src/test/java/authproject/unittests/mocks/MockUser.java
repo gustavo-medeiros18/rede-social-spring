@@ -15,9 +15,9 @@ public class MockUser {
     User user = new User();
 
     user.setId(number.longValue());
-    user.setUsername("usernametest" + number);
+    user.setUsername("username_" + number);
     user.setEmail("emailtest" + number + "@test.com");
-    user.setPassword("passwordtest" + number);
+    user.setPassword("Password" + number + "!");
     user.setEnabled(true);
     user.setCreatedAt(Instant.parse("2024-01-01T00:00:00Z"));
     user.setUpdatedAt(Instant.parse("2024-01-01T00:00:00Z"));
