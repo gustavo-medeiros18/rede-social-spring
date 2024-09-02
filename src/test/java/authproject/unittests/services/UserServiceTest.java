@@ -37,6 +37,26 @@ public class UserServiceTest {
   }
 
   @Test
+  void testCreate() {
+    User entity = input.mockEntity(1);
+    User persisted = entity;
+
+    when(repository.save(entity)).thenReturn(persisted);
+    User savedUser = service.create(entity);
+
+    assertNotNull(savedUser);
+    assertNotNull(savedUser.getId());
+    assertNotNull(savedUser.getLinks());
+    assertTrue(savedUser.toString().contains("links: [</user/1>;rel=\"self\"]"));
+    assertEquals("username_1", savedUser.getUsername());
+    assertEquals("emailtest1@test.com", savedUser.getEmail());
+    assertEquals("Password1!", savedUser.getPassword());
+    assertEquals(true, savedUser.getEnabled());
+    assertEquals("2024-01-01T00:00:00Z", savedUser.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", savedUser.getUpdatedAt().toString());
+  }
+
+  @Test
   void testFindAll() {
     List<User> list = input.mockEntityList();
     when(repository.findAll()).thenReturn(list);
