@@ -1,6 +1,7 @@
 package authproject.unittests.services;
 
 import authproject.exceptions.InvalidDataInputException;
+import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.User;
 import authproject.repositories.UserRepository;
 import authproject.services.UserService;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.endsWith;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -226,6 +226,22 @@ public class UserServiceTest {
     });
 
     String expectedMessage = "Username is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void testUpdateWithUnknownUser() {
+    User entity = input.mockEntity(1);
+
+    when(repository.findById(1L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      service.update(1L, entity);
+    });
+
+    String expectedMessage = "No records found for this ID!";
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
