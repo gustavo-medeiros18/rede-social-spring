@@ -1,5 +1,6 @@
 package authproject.unittests.services;
 
+import authproject.exceptions.DuplicatedEntryException;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.User;
@@ -242,6 +243,24 @@ public class UserServiceTest {
     });
 
     String expectedMessage = "No records found for this ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  void testUpdateWithDuplicatedEntry() {
+    User entity = input.mockEntity(1);
+    User persisted = entity;
+
+    when(repository.findById(1L)).thenReturn(Optional.of(entity));
+    when(repository.save(entity)).thenThrow(new RuntimeException("Duplicated entry"));
+
+    Exception exception = assertThrows(DuplicatedEntryException.class, () -> {
+      service.update(1L, entity);
+    });
+
+    String expectedMessage = "Username or email already exists!";
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
