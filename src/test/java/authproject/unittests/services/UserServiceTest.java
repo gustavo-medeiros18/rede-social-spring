@@ -72,6 +72,22 @@ public class UserServiceTest {
   }
 
   @Test
+  void testCreateWithDuplicatedEntry() {
+    User entity = input.mockEntity(1);
+
+    when(repository.save(entity)).thenThrow(new RuntimeException("Duplicated entry"));
+
+    Exception exception = assertThrows(DuplicatedEntryException.class, () -> {
+      service.create(entity);
+    });
+
+    String expectedMessage = "Username or email already exists!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testCreateWithInvalidUsername() {
     User entity = input.mockEntity(1);
     entity.setUsername("mynameiswaytoolongandshouldnotbeaccepted");
