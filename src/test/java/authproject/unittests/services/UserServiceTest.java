@@ -185,6 +185,20 @@ public class UserServiceTest {
   }
 
   @Test
+  void testFindSingleWithUnknownUser() {
+    when(repository.findById(1L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      service.findSingle(1L);
+    });
+
+    String expectedMessage = "No records found for this ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testUpdate() {
     User entity = input.mockEntity(1);
     User persisted = entity;
