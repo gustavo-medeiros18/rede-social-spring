@@ -86,6 +86,21 @@ public class UserServiceTest {
   }
 
   @Test
+  void testCreateWithInvalidEmail() {
+    User entity = input.mockEntity(1);
+    entity.setEmail("invalidemail");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      service.create(entity);
+    });
+
+    String expectedMessage = "Email is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testFindAll() {
     List<User> list = input.mockEntityList();
     when(repository.findAll()).thenReturn(list);
