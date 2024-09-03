@@ -284,6 +284,21 @@ public class PhotoServiceTest {
   }
 
   @Test
+  void testUpdateWithInvalidDescription() {
+    PhotoDto dto = photoInput.mockDto(1);
+    dto.setDescription("");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      photoService.update(1L, dto);
+    });
+
+    String expectedMessage = "Description is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testDelete() {
     Photo entity = photoInput.mockEntity(1);
     when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
