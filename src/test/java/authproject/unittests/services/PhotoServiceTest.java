@@ -1,6 +1,7 @@
 package authproject.unittests.services;
 
 import authproject.dtos.PhotoDto;
+import authproject.exceptions.InvalidDataInputException;
 import authproject.models.Photo;
 import authproject.models.User;
 import authproject.repositories.PhotoRepository;
@@ -68,6 +69,21 @@ public class PhotoServiceTest {
     assertEquals("2024-01-01T00:00:00Z", savedPhoto.getCreatedAt().toString());
     assertEquals("2024-01-01T00:00:00Z", savedPhoto.getUpdatedAt().toString());
     assertEquals(correspondingUser, savedPhoto.getUser());
+  }
+
+  @Test
+  void testCreateWithInvalidUrl() {
+    PhotoDto dto = photoInput.mockDto(1);
+    dto.setUrl("invalid-url");
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      photoService.create(dto);
+    });
+
+    String expectedMessage = "URL is invalid!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
