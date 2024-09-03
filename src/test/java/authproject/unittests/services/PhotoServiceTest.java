@@ -1,5 +1,6 @@
 package authproject.unittests.services;
 
+import authproject.dtos.PhotoDto;
 import authproject.models.Photo;
 import authproject.models.User;
 import authproject.repositories.PhotoRepository;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,6 +46,28 @@ public class PhotoServiceTest {
     userInput = new MockUser();
 
     MockitoAnnotations.openMocks(this);
+  }
+
+  @Test
+  void testCreate() {
+    PhotoDto dto = photoInput.mockDto(1);
+    Photo entity = photoInput.mockEntity(1);
+    Photo persisted = entity;
+    User correspondingUser = userInput.mockEntity(1);
+
+    when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(correspondingUser));
+    doReturn(persisted).when(photoRepository).save(any(Photo.class));
+    Photo savedPhoto = photoService.create(dto);
+
+    assertNotNull(savedPhoto);
+    assertNotNull(savedPhoto.getId());
+    assertNotNull(savedPhoto.getLinks());
+    assertTrue(savedPhoto.toString().contains("links: [</photo/1>;rel=\"self\"]"));
+    assertEquals("http://test.com/photo_1.jpg", savedPhoto.getUrl());
+    assertEquals("Description for photo 1", savedPhoto.getDescription());
+    assertEquals("2024-01-01T00:00:00Z", savedPhoto.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", savedPhoto.getUpdatedAt().toString());
+    assertEquals(correspondingUser, savedPhoto.getUser());
   }
 
   @Test
