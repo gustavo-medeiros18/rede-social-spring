@@ -4,8 +4,14 @@ import authproject.models.Photo;
 import authproject.models.User;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MockPhoto {
+  public Photo mockEntity() {
+    return mockEntity(0);
+  }
+
   public Photo mockEntity(Integer number) {
     Photo photo = new Photo();
 
@@ -19,5 +25,13 @@ public class MockPhoto {
     photo.setUser(user);
 
     return photo;
+  }
+
+  public List<Photo> mockEntityList() {
+    List<Photo> photos = new ArrayList<Photo>();
+    for (int i = 0; i < 15; i++)
+      photos.add(mockEntity(i));
+
+    return photos;
   }
 }
