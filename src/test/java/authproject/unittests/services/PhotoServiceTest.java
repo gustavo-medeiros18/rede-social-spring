@@ -239,4 +239,18 @@ public class PhotoServiceTest {
 
     photoService.delete(1L);
   }
+
+  @Test
+  void testDeleteWithUnknownPhoto() {
+    when(photoRepository.findById(1L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      photoService.delete(1L);
+    });
+
+    String expectedMessage = "No records found for this ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
