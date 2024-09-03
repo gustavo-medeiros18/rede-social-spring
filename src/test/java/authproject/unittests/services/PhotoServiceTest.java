@@ -233,6 +233,24 @@ public class PhotoServiceTest {
   }
 
   @Test
+  void testUpdateWithNullInput() {
+    PhotoDto dto = photoInput.mockDto();
+
+    dto.setUrl(null);
+    dto.setDescription(null);
+    dto.setUserId(null);
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      photoService.update(1L, dto);
+    });
+
+    String expectedMessage = "Photo object has null attributes!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testUpdateWithUnknownUser() {
     PhotoDto dto = photoInput.mockDto(1);
     dto.setUserId(2L);
