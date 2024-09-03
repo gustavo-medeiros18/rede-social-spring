@@ -233,6 +233,26 @@ public class PhotoServiceTest {
   }
 
   @Test
+  void testUpdateWithUnknownUser() {
+    PhotoDto dto = photoInput.mockDto(1);
+    dto.setUserId(2L);
+
+    Photo entity = photoInput.mockEntity(1);
+
+    when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
+    when(userRepository.findById(2L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      photoService.update(1L, dto);
+    });
+
+    String expectedMessage = "No records found for this User ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void testDelete() {
     Photo entity = photoInput.mockEntity(1);
     when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
