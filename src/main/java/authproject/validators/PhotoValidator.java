@@ -7,8 +7,8 @@ public class PhotoValidator {
     return url.matches(urlRegex);
   }
 
-  public static boolean descriptionIsValid(String url) {
-    return url != null && !url.isEmpty();
+  public static boolean descriptionIsValid(String description) {
+    return description != null && !description.isEmpty();
   }
 
   public static boolean userIdIsValid(Long userId) {
