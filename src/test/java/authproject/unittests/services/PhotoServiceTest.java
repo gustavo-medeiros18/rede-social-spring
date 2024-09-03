@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +43,53 @@ public class PhotoServiceTest {
     userInput = new MockUser();
 
     MockitoAnnotations.openMocks(this);
+  }
+
+  @Test
+  void TestFindAll() {
+    List<Photo> list = photoInput.mockEntityList();
+    when(photoRepository.findAll()).thenReturn(list);
+
+    List<Photo> returnedPhotos = photoService.findAll();
+
+    assertNotNull(returnedPhotos);
+    assertEquals(15, returnedPhotos.size());
+
+    Photo photoOne = returnedPhotos.get(1);
+    assertNotNull(photoOne);
+    assertNotNull(photoOne.getId());
+    assertNotNull(photoOne.getLinks());
+    assertTrue(photoOne.toString().contains("links: [</photo/1>;rel=\"self\"]"));
+    assertEquals("http://test.com/photo_1.jpg", photoOne.getUrl());
+    assertEquals("Description for photo 1", photoOne.getDescription());
+    assertEquals("2024-01-01T00:00:00Z", photoOne.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", photoOne.getUpdatedAt().toString());
+    User photoOneUser = userInput.mockEntity(1);
+    assertEquals(photoOneUser, photoOne.getUser());
+
+    Photo photoFour = returnedPhotos.get(4);
+    assertNotNull(photoFour);
+    assertNotNull(photoFour.getId());
+    assertNotNull(photoFour.getLinks());
+    assertTrue(photoFour.toString().contains("links: [</photo/4>;rel=\"self\"]"));
+    assertEquals("http://test.com/photo_4.jpg", photoFour.getUrl());
+    assertEquals("Description for photo 4", photoFour.getDescription());
+    assertEquals("2024-01-01T00:00:00Z", photoFour.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", photoFour.getUpdatedAt().toString());
+    User photoFourUser = userInput.mockEntity(4);
+    assertEquals(photoFourUser, photoFour.getUser());
+
+    Photo photoSeven = returnedPhotos.get(7);
+    assertNotNull(photoSeven);
+    assertNotNull(photoSeven.getId());
+    assertNotNull(photoSeven.getLinks());
+    assertTrue(photoSeven.toString().contains("links: [</photo/7>;rel=\"self\"]"));
+    assertEquals("http://test.com/photo_7.jpg", photoSeven.getUrl());
+    assertEquals("Description for photo 7", photoSeven.getDescription());
+    assertEquals("2024-01-01T00:00:00Z", photoSeven.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", photoSeven.getUpdatedAt().toString());
+    User photoSevenUser = userInput.mockEntity(7);
+    assertEquals(photoSevenUser, photoSeven.getUser());
   }
 
   @Test
