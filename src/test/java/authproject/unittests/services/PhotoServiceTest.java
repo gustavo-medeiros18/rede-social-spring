@@ -2,6 +2,7 @@ package authproject.unittests.services;
 
 import authproject.dtos.PhotoDto;
 import authproject.exceptions.InvalidDataInputException;
+import authproject.exceptions.ResourceNotFoundException;
 import authproject.models.Photo;
 import authproject.models.User;
 import authproject.repositories.PhotoRepository;
@@ -187,6 +188,20 @@ public class PhotoServiceTest {
 
     User mockedUser = userInput.mockEntity(1);
     assertEquals(mockedUser, returnedPhoto.getUser());
+  }
+
+  @Test
+  void testFindSingleWithUnknownPhoto() {
+    when(photoRepository.findById(1L)).thenReturn(Optional.empty());
+
+    Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+      photoService.findSingle(1L);
+    });
+
+    String expectedMessage = "No records found for this ID!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
