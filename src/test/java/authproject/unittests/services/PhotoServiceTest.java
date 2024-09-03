@@ -114,4 +114,12 @@ public class PhotoServiceTest {
     User mockedUser = userInput.mockEntity(1);
     assertEquals(mockedUser, returnedPhoto.getUser());
   }
+
+  @Test
+  void testDelete() {
+    Photo entity = photoInput.mockEntity(1);
+    when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
+
+    photoService.delete(1L);
+  }
 }
