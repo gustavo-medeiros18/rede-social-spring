@@ -102,6 +102,24 @@ public class PhotoServiceTest {
   }
 
   @Test
+  void testCreateWithNullInput() {
+    PhotoDto dto = photoInput.mockDto();
+
+    dto.setUrl(null);
+    dto.setDescription(null);
+    dto.setUserId(null);
+
+    Exception exception = assertThrows(InvalidDataInputException.class, () -> {
+      photoService.create(dto);
+    });
+
+    String expectedMessage = "Photo object has null attributes!";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
   void TestFindAll() {
     List<Photo> list = photoInput.mockEntityList();
     when(photoRepository.findAll()).thenReturn(list);
