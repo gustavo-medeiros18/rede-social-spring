@@ -141,6 +141,34 @@ public class PhotoServiceTest {
   }
 
   @Test
+  void testUpdate() {
+    PhotoDto dto = photoInput.mockDto(1);
+    Photo entity = photoInput.mockEntity(1);
+    Photo persisted = entity;
+    User correspondingUser = userInput.mockEntity(1);
+
+    when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
+    when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(correspondingUser));
+    doReturn(persisted).when(photoRepository).save(any(Photo.class));
+
+    Photo updatedPhoto = photoService.update(1L, dto);
+
+    assertNotNull(updatedPhoto);
+    assertNotNull(updatedPhoto.getId());
+    assertNotNull(updatedPhoto.getLinks());
+    assertNotNull(updatedPhoto.getUser());
+
+    assertTrue(updatedPhoto.toString().contains("links: [</photo/1>;rel=\"self\"]"));
+
+    assertEquals("http://test.com/photo_1.jpg", updatedPhoto.getUrl());
+    assertEquals("Description for photo 1", updatedPhoto.getDescription());
+    assertEquals("2024-01-01T00:00:00Z", updatedPhoto.getCreatedAt().toString());
+    assertEquals("2024-01-01T00:00:00Z", updatedPhoto.getUpdatedAt().toString());
+
+    assertEquals(correspondingUser, updatedPhoto.getUser());
+  }
+
+  @Test
   void testDelete() {
     Photo entity = photoInput.mockEntity(1);
     when(photoRepository.findById(1L)).thenReturn(Optional.of(entity));
