@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "photos", schema = "database")
-@JsonPropertyOrder({"id", "user_id", "url", "description", "created_at", "updated_at"})
+@JsonPropertyOrder({"id", "userId", "url", "description", "createdAt", "updatedAt"})
 public class Photo extends RepresentationModel<Photo> implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Photo extends RepresentationModel<Photo> implements Serializable {
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   @JsonIdentityReference(alwaysAsId = true)
-  @JsonProperty("user_id")
+  @JsonProperty("userId")
   private User user;
 
   @Column(name = "url", nullable = false)
