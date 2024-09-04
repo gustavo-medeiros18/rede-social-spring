@@ -1,8 +1,6 @@
 package authproject.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,9 +32,8 @@ public class User extends RepresentationModel<User> implements Serializable {
   @Column(name = "email", nullable = false, length = 100)
   private String email;
 
-  @ColumnDefault("1")
   @Column(name = "enabled", nullable = false)
-  private Boolean enabled = false;
+  private Boolean enabled = true;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Photo> photos;
