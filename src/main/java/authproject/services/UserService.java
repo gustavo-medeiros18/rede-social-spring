@@ -27,7 +27,7 @@ public class UserService {
   }
 
   public User create(User user) {
-    logger.info("Saving user: " + user);
+    logger.info("Saving user...");
 
     verifyUserFields(user);
 
