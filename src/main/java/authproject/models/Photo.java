@@ -1,6 +1,8 @@
 package authproject.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.*;
@@ -12,6 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "photos", schema = "database")
+@JsonPropertyOrder({"id", "user_id", "url", "description", "created_at", "updated_at"})
 public class Photo extends RepresentationModel<Photo> implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +25,7 @@ public class Photo extends RepresentationModel<Photo> implements Serializable {
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   @JsonIdentityReference(alwaysAsId = true)
+  @JsonProperty("user_id")
   private User user;
 
   @Column(name = "url", nullable = false)
