@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -67,6 +68,14 @@ public class User extends RepresentationModel<User> implements UserDetails, Seri
 
   public User() {
 
+  }
+
+  public List<String> getRoles() {
+    List<String> roles = new ArrayList<>();
+    for (Permission permission : this.permissions)
+      roles.add(permission.getDescription());
+
+    return roles;
   }
 
   @Override
