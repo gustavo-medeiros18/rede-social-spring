@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,6 +38,7 @@ public class UserService implements UserDetailsService {
     try {
       User createdUser = repository.save(user);
 
+      createdUser.setPermissions(new ArrayList<>());
       createdUser.add(linkTo(methodOn(UserController.class).findSingle(createdUser.getId())).withSelfRel());
       return createdUser;
     } catch (Exception e) {
