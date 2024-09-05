@@ -197,4 +197,22 @@ public class User extends RepresentationModel<User> implements UserDetails, Seri
   public int hashCode() {
     return Objects.hash(id, username, password, email, enabled, createdAt);
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "id=" + id +
+        ", username='" + username + '\'' +
+        ", password='" + password + '\'' +
+        ", email='" + email + '\'' +
+        ", accountNonExpired=" + accountNonExpired +
+        ", accountNonLocked=" + accountNonLocked +
+        ", credentialsNonExpired=" + credentialsNonExpired +
+        ", enabled=" + enabled +
+        ", photos=" + photos +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        ", permissions=" + permissions +
+        '}';
+  }
 }
