@@ -38,8 +38,6 @@ public class AuthService {
       authenticationManager
           .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-      System.out.println("Passou do authenticate");
-
       var user = repository.findByUsername(username);
       var tokenResponse = new TokenDto();
 
@@ -51,8 +49,6 @@ public class AuthService {
 
       return ResponseEntity.ok(tokenResponse);
     } catch (Exception e) {
-      System.out.println("Caiu no catch");
-
       throw new BadCredentialsException("Invalid username/password supplied");
     }
   }
