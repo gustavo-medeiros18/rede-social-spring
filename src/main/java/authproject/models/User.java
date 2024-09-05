@@ -163,6 +163,22 @@ public class User extends RepresentationModel<User> implements UserDetails, Seri
     this.updatedAt = updatedAt;
   }
 
+  public List<Photo> getPhotos() {
+    return photos;
+  }
+
+  public void setPhotos(List<Photo> photos) {
+    this.photos = photos;
+  }
+
+  public List<Permission> getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(List<Permission> permissions) {
+    this.permissions = permissions;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
