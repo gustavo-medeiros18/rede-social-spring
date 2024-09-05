@@ -8,6 +8,9 @@ import authproject.models.User;
 import authproject.repositories.UserRepository;
 import authproject.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
   private Logger logger = Logger.getLogger(UserService.class.getName());
   private UserRepository repository;
 
@@ -61,6 +64,18 @@ public class UserService {
 
     user.add(linkTo(methodOn(UserController.class).findSingle(id)).withSelfRel());
     return user;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    logger.info("Finding user by username: " + username);
+
+    User user = repository.findByUsername(username);
+
+    if (user != null)
+      return user;
+    else
+      throw new UsernameNotFoundException("Username " + username + " not found");
   }
 
   public User update(Long id, User user) {
