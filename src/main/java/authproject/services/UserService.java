@@ -11,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Service
@@ -34,6 +39,7 @@ public class UserService implements UserDetailsService {
     logger.info("Saving user...");
 
     verifyUserFields(user);
+    user.setPassword(encodePassword(user.getPassword()));
 
     try {
       User createdUser = repository.save(user);
@@ -89,9 +95,10 @@ public class UserService implements UserDetailsService {
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
 
+
     existingUser.setUsername(user.getUsername());
     existingUser.setEmail(user.getEmail());
-    existingUser.setPassword(user.getPassword());
+    existingUser.setPassword(encodePassword(user.getPassword()));
 
     try {
       User updatedUser = repository.save(existingUser);
@@ -126,5 +133,22 @@ public class UserService implements UserDetailsService {
       throw new InvalidDataInputException("Password is invalid!");
     if (!UserValidator.emailIsValid(user.getEmail()))
       throw new InvalidDataInputException("Email is invalid!");
+  }
+
+  private String encodePassword(String password) {
+    Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder(
+        "",
+        8,
+        185000,
+        Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256
+    );
+    Map<String, PasswordEncoder> encoders = new HashMap<>();
+    encoders.put("pbkdf2", pbkdf2Encoder);
+
+    DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
+    passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2Encoder);
+
+    String encodedPassword = passwordEncoder.encode(password).replace("{pbkdf2}", "");
+    return encodedPassword;
   }
 }
