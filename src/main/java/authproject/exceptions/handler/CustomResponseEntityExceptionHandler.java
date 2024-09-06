@@ -6,6 +6,7 @@ import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,5 +72,19 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     );
 
     return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(BadCredentialsException.class)
+  public final ResponseEntity<ExceptionResponse> handleBadCredentialsException(
+      Exception ex,
+      WebRequest request
+  ) {
+    ExceptionResponse exceptionResponse = new ExceptionResponse(
+        new Date(),
+        ex.getMessage(),
+        request.getDescription(false)
+    );
+
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
   }
 }
