@@ -1,5 +1,6 @@
 package authproject.models;
 
+import authproject.dtos.UserDto;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -68,6 +69,12 @@ public class User extends RepresentationModel<User> implements UserDetails, Seri
 
   public User() {
 
+  }
+
+  public User(UserDto userDto) {
+    this.username = userDto.getUsername();
+    this.password = userDto.getPassword();
+    this.email = userDto.getEmail();
   }
 
   public List<String> getRoles() {
