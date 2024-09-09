@@ -59,6 +59,8 @@ public class PhotoService {
     );
     photo.setUser(user);
 
+    photo.setUrl(this.upload(photoDto.getImageFile()));
+
     Photo createdPhoto = photoRepository.save(photo);
     createdPhoto.add(linkTo(methodOn(PhotoController.class).findSingle(createdPhoto.getId())).withSelfRel());
 
