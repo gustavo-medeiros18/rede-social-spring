@@ -88,19 +88,18 @@ public class UserService implements UserDetailsService {
       throw new UsernameNotFoundException("Username " + username + " not found");
   }
 
-  public User update(Long id, User user) {
+  public User update(Long id, UserDto userDto) {
     logger.info("Updating user with id: " + id);
 
-    verifyUserFields(user);
+    verifyUserFields(userDto);
 
     User existingUser = repository.findById(id).orElseThrow(
         () -> new ResourceNotFoundException("No records found for this ID!")
     );
 
-
-    existingUser.setUsername(user.getUsername());
-    existingUser.setEmail(user.getEmail());
-    existingUser.setPassword(encodePassword(user.getPassword()));
+    existingUser.setUsername(userDto.getUsername());
+    existingUser.setEmail(userDto.getEmail());
+    existingUser.setPassword(encodePassword(userDto.getPassword()));
 
     try {
       User updatedUser = repository.save(existingUser);
