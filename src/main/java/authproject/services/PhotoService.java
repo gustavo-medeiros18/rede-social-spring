@@ -36,7 +36,6 @@ public class PhotoService {
     verifyPhotoFields(photoDto);
 
     Photo photo = new Photo();
-    photo.setUrl(photoDto.getUrl());
     photo.setDescription(photoDto.getDescription());
 
     User user = userRepository.findById(photoDto.getUserId()).orElseThrow(() ->
@@ -80,7 +79,7 @@ public class PhotoService {
         () -> new ResourceNotFoundException("No records found for this Photo ID!")
     );
 
-    existentPhoto.setUrl(photoDto.getUrl());
+//    existentPhoto.setUrl(photoDto.getUrl());
     existentPhoto.setDescription(photoDto.getDescription());
 
     User user = userRepository.findById(photoDto.getUserId()).orElseThrow(
@@ -108,13 +107,13 @@ public class PhotoService {
   private void verifyPhotoFields(PhotoDto photoDto) {
     if (
         photoDto == null ||
-            photoDto.getUrl() == null ||
+            photoDto.getImageFile() == null ||
             photoDto.getDescription() == null ||
             photoDto.getUserId() == null
     )
       throw new InvalidDataInputException("Photo object has null attributes!");
-    if (!PhotoValidator.urlIsValid(photoDto.getUrl()))
-      throw new InvalidDataInputException("URL is invalid!");
+//    if (!PhotoValidator.urlIsValid(photoDto.getUrl()))
+//      throw new InvalidDataInputException("URL is invalid!");
     if (!PhotoValidator.descriptionIsValid(photoDto.getDescription()))
       throw new InvalidDataInputException("Description is invalid!");
     if (!PhotoValidator.userIdIsValid(photoDto.getUserId()))
