@@ -36,11 +36,12 @@ public class UserService implements UserDetailsService {
     this.repository = repository;
   }
 
-  public User create(User user) {
+  public User create(UserDto userDto) {
     logger.info("Saving user...");
 
-    verifyUserFields(user);
-    user.setPassword(encodePassword(user.getPassword()));
+    verifyUserFields(userDto);
+    userDto.setPassword(encodePassword(userDto.getPassword()));
+    User user = new User(userDto);
 
     try {
       User createdUser = repository.save(user);
