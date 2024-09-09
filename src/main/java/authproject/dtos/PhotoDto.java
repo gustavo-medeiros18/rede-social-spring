@@ -1,7 +1,9 @@
 package authproject.dtos;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class PhotoDto {
-  private String url;
+  private MultipartFile imageFile;
   private String description;
   private Long userId;
 
@@ -9,12 +11,12 @@ public class PhotoDto {
 
   }
 
-  public String getUrl() {
-    return url;
+  public MultipartFile getImageFile() {
+    return imageFile;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setImageFile(MultipartFile imageFile) {
+    this.imageFile = imageFile;
   }
 
   public String getDescription() {
