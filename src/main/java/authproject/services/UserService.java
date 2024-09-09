@@ -1,6 +1,7 @@
 package authproject.services;
 
 import authproject.controllers.UserController;
+import authproject.dtos.UserDto;
 import authproject.exceptions.DuplicatedEntryException;
 import authproject.exceptions.InvalidDataInputException;
 import authproject.exceptions.ResourceNotFoundException;
@@ -119,19 +120,19 @@ public class UserService implements UserDetailsService {
     repository.delete(existingUser);
   }
 
-  private void verifyUserFields(User user) {
+  private void verifyUserFields(UserDto userDto) {
     if (
-        user == null ||
-            user.getUsername() == null ||
-            user.getPassword() == null ||
-            user.getEmail() == null
+        userDto == null ||
+            userDto.getUsername() == null ||
+            userDto.getPassword() == null ||
+            userDto.getEmail() == null
     )
       throw new InvalidDataInputException("User object has null attributes!");
-    if (!UserValidator.usernameIsValid(user.getUsername()))
+    if (!UserValidator.usernameIsValid(userDto.getUsername()))
       throw new InvalidDataInputException("Username is invalid!");
-    if (!UserValidator.passwordIsValid(user.getPassword()))
+    if (!UserValidator.passwordIsValid(userDto.getPassword()))
       throw new InvalidDataInputException("Password is invalid!");
-    if (!UserValidator.emailIsValid(user.getEmail()))
+    if (!UserValidator.emailIsValid(userDto.getEmail()))
       throw new InvalidDataInputException("Email is invalid!");
   }
 
