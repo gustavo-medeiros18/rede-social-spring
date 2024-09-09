@@ -6,6 +6,7 @@ import authproject.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,8 +20,17 @@ public class PhotoController {
     this.service = service;
   }
 
-  @PostMapping()
-  public ResponseEntity<Photo> create(@RequestBody PhotoDto photoDto) {
+  @PostMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<Photo> create(
+      @RequestParam("description") String description,
+      @RequestParam("userId") Long userId,
+      @RequestParam("imageFile") MultipartFile imageFile
+  ) {
+    PhotoDto photoDto = new PhotoDto();
+    photoDto.setDescription(description);
+    photoDto.setUserId(userId);
+    photoDto.setImageFile(imageFile);
+
     return ResponseEntity.ok(service.create(photoDto));
   }
 
