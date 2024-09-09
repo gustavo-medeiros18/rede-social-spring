@@ -1,5 +1,6 @@
 package authproject.controllers;
 
+import authproject.dtos.UserDto;
 import authproject.models.User;
 import authproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class UserController {
   }
 
   @PostMapping()
-  public ResponseEntity<User> create(@RequestBody User user) {
-    return ResponseEntity.ok(service.create(user));
+  public ResponseEntity<User> create(@RequestBody UserDto userDto) {
+    return ResponseEntity.ok(service.create(userDto));
   }
 
   @GetMapping()
@@ -34,8 +35,8 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody User user) {
-    User updatedUser = service.update(id, user);
+  public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+    User updatedUser = service.update(id, userDto);
 
     if (updatedUser == null) return ResponseEntity.notFound().build();
     else return ResponseEntity.ok(updatedUser);
