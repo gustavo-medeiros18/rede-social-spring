@@ -30,6 +30,7 @@ public class User extends RepresentationModel<User> implements UserDetails, Seri
   @Column(name = "username", nullable = false, length = 50)
   private String username;
 
+  @JsonIgnore
   @Column(name = "password", nullable = false, length = 100)
   private String password;
 
