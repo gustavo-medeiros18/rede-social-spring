@@ -8,6 +8,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,15 @@ import java.util.logging.Logger;
 public class FileUploadService {
   private static final org.slf4j.Logger log = LoggerFactory.getLogger(FileUploadService.class);
   Logger logger = Logger.getLogger(PhotoService.class.getName());
-  private final String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/rede-social-73c41.appspot.com/o/%s?alt=media";
+
+  @Value("${firebase.download_url}")
+  private String DOWNLOAD_URL;
+
+  @Value("${firebase.bucket}")
+  private String BUCKET;
+
+  @Value("${firebase.configuration_file_path}")
+  private String CONFIGURATION_FILE_PATH;
 
   private void validateFile(MultipartFile multipartFile) {
     String contentType = multipartFile.getContentType();
@@ -53,9 +62,9 @@ public class FileUploadService {
   }
 
   private String saveFileInFirebaseStorage(File file, String fileName) throws IOException {
-    BlobId blobId = BlobId.of("rede-social-73c41.appspot.com", fileName);
+    BlobId blobId = BlobId.of(BUCKET, fileName);
     BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/rede-social-73c41-firebase-adminsdk-meocm-59905394be.json"));
+    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(CONFIGURATION_FILE_PATH));
 
     Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
     storage.create(blobInfo, Files.readAllBytes(file.toPath()));
