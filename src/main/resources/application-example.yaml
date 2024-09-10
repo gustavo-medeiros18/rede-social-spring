@@ -1,0 +1,17 @@
+spring:
+  application:
+    name:
+  datasource:
+    url:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username:
+    password:
+security:
+  jwt:
+    token:
+      secret-key:
+      expire-length:
+firebase:
+  download_url:
+  bucket:
+  configuration_file_path:
