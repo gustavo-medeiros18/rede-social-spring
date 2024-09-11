@@ -84,7 +84,7 @@ public class PhotoService {
         () -> new ResourceNotFoundException("No records found for this Photo ID!")
     );
 
-//    existentPhoto.setUrl(photoDto.getUrl());
+    existentPhoto.setUrl(fileUploadService.uploadFile(photoDto.getImageFile()));
     existentPhoto.setDescription(photoDto.getDescription());
 
     User user = userRepository.findById(photoDto.getUserId()).orElseThrow(
