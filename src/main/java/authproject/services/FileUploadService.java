@@ -1,6 +1,5 @@
 package authproject.services;
 
-import authproject.exceptions.InvalidDataInputException;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobId;
@@ -36,18 +35,6 @@ public class FileUploadService {
   @Value("${firebase.configuration_file_path}")
   private String CONFIGURATION_FILE_PATH;
 
-  private void validateFile(MultipartFile multipartFile) {
-    String contentType = multipartFile.getContentType();
-    if (contentType == null || !contentType.startsWith("image/")) {
-      throw new InvalidDataInputException("The file must be an image!");
-    }
-
-    long maxSize = 5 * 1024 * 1024; // 5MB
-    if (multipartFile.getSize() > maxSize) {
-      throw new InvalidDataInputException("The file must be smaller than 5MB!");
-    }
-  }
-
   private String getExtension(String fileName) {
     return fileName.substring(fileName.lastIndexOf("."));
   }
@@ -76,7 +63,6 @@ public class FileUploadService {
 
   public String uploadFile(MultipartFile multipartFile) {
     logger.info("Uploading file to Firebase Storage");
-    validateFile(multipartFile);
 
     try {
       String fileName = multipartFile.getOriginalFilename();
