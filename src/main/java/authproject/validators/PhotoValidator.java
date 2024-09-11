@@ -1,11 +1,16 @@
 package authproject.validators;
 
-public class PhotoValidator {
-  private static String urlRegex = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
+import org.springframework.web.multipart.MultipartFile;
 
-  public static boolean urlIsValid(String url) {
-    return url.matches(urlRegex);
-  }
+public class PhotoValidator {
+  public static boolean imageFileIsValid(MultipartFile multipartFile) {
+  String contentType = multipartFile.getContentType();
+  long maxSize = 5 * 1024 * 1024; // 5MB
+
+  return contentType != null &&
+      contentType.startsWith("image/") &&
+      multipartFile.getSize() <= maxSize;
+}
 
   public static boolean descriptionIsValid(String description) {
     return description != null && !description.isEmpty();
