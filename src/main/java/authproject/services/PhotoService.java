@@ -117,8 +117,8 @@ public class PhotoService {
             photoDto.getUserId() == null
     )
       throw new InvalidDataInputException("Photo object has null attributes!");
-//    if (!PhotoValidator.urlIsValid(photoDto.getUrl()))
-//      throw new InvalidDataInputException("URL is invalid!");
+    if (!PhotoValidator.imageFileIsValid(photoDto.getImageFile()))
+      throw new InvalidDataInputException("File must be an image and have a maximum size of 5MB!");
     if (!PhotoValidator.descriptionIsValid(photoDto.getDescription()))
       throw new InvalidDataInputException("Description is invalid!");
     if (!PhotoValidator.userIdIsValid(photoDto.getUserId()))
