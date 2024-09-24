@@ -35,7 +35,7 @@ public class MockPhoto {
   public PhotoDto mockDto(Integer number) {
     PhotoDto photoDto = new PhotoDto();
 
-    photoDto.setUrl(String.format("http://test.com/photo_%d.jpg", number));
+//    photoDto.setUrl(String.format("http://test.com/photo_%d.jpg", number));
     photoDto.setDescription("Description for photo " + number);
     photoDto.setUserId(number.longValue());
 

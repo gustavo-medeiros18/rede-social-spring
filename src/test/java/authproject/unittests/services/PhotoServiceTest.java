@@ -75,7 +75,7 @@ public class PhotoServiceTest {
   @Test
   void testCreateWithInvalidUrl() {
     PhotoDto dto = photoInput.mockDto(1);
-    dto.setUrl("invalid-url");
+//    dto.setUrl("invalid-url");
 
     Exception exception = assertThrows(InvalidDataInputException.class, () -> {
       photoService.create(dto);
@@ -106,7 +106,7 @@ public class PhotoServiceTest {
   void testCreateWithNullInput() {
     PhotoDto dto = photoInput.mockDto();
 
-    dto.setUrl(null);
+//    dto.setUrl(null);
     dto.setDescription(null);
     dto.setUserId(null);
 
@@ -236,7 +236,7 @@ public class PhotoServiceTest {
   void testUpdateWithNullInput() {
     PhotoDto dto = photoInput.mockDto();
 
-    dto.setUrl(null);
+//    dto.setUrl(null);
     dto.setDescription(null);
     dto.setUserId(null);
 
@@ -289,7 +289,7 @@ public class PhotoServiceTest {
   @Test
   void testUpdateWithInvalidUrl() {
     PhotoDto dto = photoInput.mockDto(1);
-    dto.setUrl("invalid-url");
+//    dto.setUrl("invalid-url");
 
     Exception exception = assertThrows(InvalidDataInputException.class, () -> {
       photoService.update(1L, dto);
