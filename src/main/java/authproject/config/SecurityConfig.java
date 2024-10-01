@@ -71,6 +71,7 @@ public class SecurityConfig {
                     "/auth/refresh/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                .requestMatchers(HttpMethod.GET, "/photo").permitAll()
                 .anyRequest().authenticated()
         )
         .cors(cors -> {})
