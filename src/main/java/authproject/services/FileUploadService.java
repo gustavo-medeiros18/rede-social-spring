@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,8 +29,8 @@ public class FileUploadService {
   @Value("${firebase.bucket}")
   private String BUCKET;
 
-  @Value("${firebase.configuration_file_path}")
-  private String CONFIGURATION_FILE_PATH;
+  @Value("${firebase.credentials}")
+  private String CREDENTIALS;
 
   private String getExtension(String fileName) {
     return fileName.substring(fileName.lastIndexOf("."));
@@ -51,7 +48,7 @@ public class FileUploadService {
   private String saveFileInFirebaseStorage(File file, String fileName) throws IOException {
     BlobId blobId = BlobId.of(BUCKET, fileName);
     BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream(CONFIGURATION_FILE_PATH));
+    Credentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(this.CREDENTIALS.getBytes()));
 
     Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
     storage.create(blobInfo, Files.readAllBytes(file.toPath()));
