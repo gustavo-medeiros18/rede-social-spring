@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: auth-project
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driverClassName: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+security:
+  jwt:
+    token:
+      secret-key: ${SECURITY_JWT_TOKEN_SECRET_KEY}
+      expire-length: ${SECURITY_JWT_TOKEN_EXPIRE_LENGTH}
+firebase:
+  download_url: ${FIREBASE_DOWNLOAD_URL}
+  bucket: ${FIREBASE_BUCKET}
+  credentials: ${FIREBASE_CREDENTIALS}
