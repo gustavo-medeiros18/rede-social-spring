@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  app:
+    container_name: api-spring-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SECURITY_JWT_TOKEN_SECRET_KEY: ${SECURITY_JWT_TOKEN_SECRET_KEY}
+      SECURITY_JWT_TOKEN_EXPIRE_LENGTH: ${SECURITY_JWT_TOKEN_EXPIRE_LENGTH}
+      FIREBASE_DOWNLOAD_URL: ${FIREBASE_DOWNLOAD_URL}
+      FIREBASE_BUCKET: ${FIREBASE_BUCKET}
+      FIREBASE_CREDENTIALS: ${FIREBASE_CREDENTIALS}
+    depends_on:
+      - db
+    networks:
+      - api-rede-social
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: rede_social
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    networks:
+      - api-rede-social
+
+networks:
+  api-rede-social:
+    name: api-rede-social
